@@ -6,9 +6,9 @@ export class creteTableNhanvien1666014716416 implements MigrationInterface {
         await queryRunner.query(`
             CREATE TABLE "nhan-vien" (
                 "ma_nhan_vien" SERIAL NOT NULL primary key,
-                "full_name" text NOT NULL,
+                "full_name" json NOT NULL,
                 "pass_word" text NOT NULL,
-                "address" text NOT NULL,
+                "address" json NOT NULL,
                 "dien_thoai" text NOT NULL,
                 "chuc_vu" "chuc_vu" NOT NULL,
                 "created_at" TIMESTAMP NOT NULL DEFAULT now(),

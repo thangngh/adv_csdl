@@ -24,7 +24,7 @@ export class Kho extends CommonEntity {
   })
   diaDiem!: address[];
 
-  @OneToMany(() => Khonhanvien, (khonhanVien) => khonhanVien.kho)
+  @OneToMany(() => Khonhanvien, (khonhanVien) => khonhanVien.kho, { cascade: true })
   khonhanvien!: Khonhanvien[];
 
   constructor(partial: Partial<Kho>) {

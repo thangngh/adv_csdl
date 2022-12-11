@@ -41,4 +41,9 @@ export class NhanVienController {
   remove(@Param('id') id: string) {
     return this.nhanVienService.remove(+id);
   }
+
+  @Get("/get-name-nhan-vien")
+  async findNameNhanVien() {
+    return await this.nhanVienService.findNameNhanVien();
+  }
 }

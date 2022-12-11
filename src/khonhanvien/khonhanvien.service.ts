@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateKhonhanvienDto } from './dto/create-khonhanvien.dto';
@@ -14,38 +14,75 @@ export class KhonhanvienService {
   ) { }
 
 
-  async create(createKhonhanvienDto: CreateKhonhanvienDto, maKho: number): Promise<void> {
-    await this.khoNhanVienRepository.createQueryBuilder('kho-nhan-vien')
-      .insert()
-      .into(Khonhanvien)
-      .values({
-        ...CreateKhonhanvienDto,
-        maKho: maKho,
-        maNhanVien: +createKhonhanvienDto
-      })
-      .execute();
+  async create(createKhonhanvienDto: CreateKhonhanvienDto, maKho: number) {
+    const groupNhanVien: Khonhanvien[] = []
+
+    for await (const maNhanVien of createKhonhanvienDto.maNhanVien) {
+      const khoNhanVien = new Khonhanvien({
+        maKho,
+        maNhanVien
+      });
+      groupNhanVien.push(khoNhanVien);
+    }
+    await this.khoNhanVienRepository.save(groupNhanVien);
+
+    return { status: HttpStatus.OK, message: "Thêm thành công" };
+
   }
 
-  // async findAll() {
-  //   const builder = this.khoNhanVienRepository.
-  //     createQueryBuilder("khoNhanVien")
-  //     .leftJoinAndSelect("khoNhanVien.nhanVien", "nhanVien")
-  //     .leftJoinAndSelect("khoNhanVien.kho", "kho")
-  //     .select()
-  //     .getMany();
+  async findAll() {
+    const builder = await this.khoNhanVienRepository.
+      createQueryBuilder("khoNhanVien")
+      .leftJoinAndSelect("khoNhanVien.nhanVien", "nhanVien")
+      .leftJoinAndSelect("khoNhanVien.kho", "kho")
+      .select()
+      .getMany();
 
-  //   return builder;
-  // }
+    return builder;
+  }
 
   async findOne(id: number) {
-    return `This action returns a #${id} khonhanvien`;
+    const builder = await this.khoNhanVienRepository.findOne({
+      where: {
+        maKho: id
+      },
+      relations: ["nhanVien", "kho"]
+    })
+
+    return builder ? builder : { status: HttpStatus.BAD_REQUEST, message: "Không tìm thấy kho nhân viên" };
   }
 
   async update(id: number, updateKhonhanvienDto: UpdateKhonhanvienDto) {
-    return `This action updates a #${id} khonhanvien`;
+    const builder = await this.khoNhanVienRepository.findOne({
+      where: {
+        maKho: id
+      },
+      relations: ["nhanVien", "kho"]
+    })
+
+    if (!builder) {
+      return { status: HttpStatus.BAD_REQUEST, message: "Không tìm thấy kho nhân viên" };
+    }
+
+    const groupNhanVien: Khonhanvien[] = []
+
+    for await (const maNhanVien of updateKhonhanvienDto.maNhanVien) {
+      const khoNhanVien = new Khonhanvien({
+        maKho: id,
+        maNhanVien
+      });
+      groupNhanVien.push(khoNhanVien);
+    }
+    await this.khoNhanVienRepository.save(groupNhanVien);
+
+    return { status: HttpStatus.OK, message: "Cập nhật thành công" };
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} khonhanvien`;
+    await this.khoNhanVienRepository.delete({
+      maKho: id
+    })
+
+    return { status: HttpStatus.OK, message: "Xóa thành công" };
   }
 }

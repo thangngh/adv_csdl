@@ -19,6 +19,16 @@ export class NhanVienService {
       values(createNhanVienDto).
       execute();
   }
+  async findNameNhanVien() {
+    const builder = await this.NhanVienRepository.
+      createQueryBuilder('nhanvien').
+      select()
+      .where(
+        'nhanvien.ma_nhan_vien < 3'
+      )
+      .getMany()
+    return builder;
+  }
 
   async findAll(): Promise<NhanVien[]> {
     try {

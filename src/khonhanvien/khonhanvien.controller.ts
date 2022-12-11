@@ -12,10 +12,10 @@ export class KhonhanvienController {
     return this.khonhanvienService.create(createKhonhanvienDto, maKho);
   }
 
-  // @Get("/get-kho-nhan-vien")
-  // findAll() {
-  //   return this.khonhanvienService.findAll();
-  // }
+  @Get("/get-kho-nhan-vien")
+  findAll() {
+    return this.khonhanvienService.findAll();
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional } from "class-validator";
+import { IsArray, IsNumber, IsOptional } from "class-validator";
 
 export class CreateKhonhanvienDto {
 
@@ -7,6 +7,6 @@ export class CreateKhonhanvienDto {
 	maKho: number;
 
 	@IsOptional()
-	@IsNumber()
+	@IsArray()
 	maNhanVien: number[];
 }

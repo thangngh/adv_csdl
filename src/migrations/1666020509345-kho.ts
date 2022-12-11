@@ -7,7 +7,7 @@ export class kho1666020509345 implements MigrationInterface {
             CREATE TABLE "kho" (
                 "ma_kho" SERIAL NOT NULL primary key,
                 "ten_kho" text NOT NULL,
-                "dia_diem" text NOT NULL,
+                "dia_diem" json NOT NULL,
                 "created_at" TIMESTAMP NOT NULL DEFAULT now(),
                 "updated_at" TIMESTAMP ,
                 "deleted_at" TIMESTAMP

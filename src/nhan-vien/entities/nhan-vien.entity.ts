@@ -16,7 +16,7 @@ export class NhanVien extends CommonEntity {
   @Column({
     name: "full_name",
     nullable: false,
-    type: "simple-json",
+    type: "jsonb",
   })
   fullName!: fullName;
 
@@ -27,13 +27,13 @@ export class NhanVien extends CommonEntity {
   password!: string;
 
   @Column({
-    type: "simple-json"
+    type: "jsonb"
   })
   address!: address;
 
   @Column({
     name: "dien_thoai",
-    type: "simple-json",
+    type: "jsonb",
   })
   phone!: string[];
 
@@ -44,7 +44,7 @@ export class NhanVien extends CommonEntity {
   })
   ChucVu!: ChucVu;
 
-  @OneToMany(() => Khonhanvien, (khonhanVien) => khonhanVien.nhanVien)
+  @OneToMany(() => Khonhanvien, (khonhanVien) => khonhanVien.nhanVien, { cascade: true })
   khonhanvien!: Khonhanvien[];
 
   constructor(partial: Partial<NhanVien>) {
